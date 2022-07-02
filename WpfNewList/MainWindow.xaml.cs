@@ -42,46 +42,54 @@ namespace WpfNewList
         /// <summary>
         /// Метод добавления задачи из TextBox в BindingList _todoDate
         /// </summary>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
+            // проверка пустоты TextBox
+            if (string.IsNullOrWhiteSpace(TextBox.Text))
+                return;
+            var  newToDoModel = new ToDoModel() { Text = TextBox.Text, Data = CalendarAdd.SelectedDate ?? DateTime.Now };
 
-            if (!string.IsNullOrWhiteSpace(TextBox.Text))
+            using (var context = new MyContext()) 
             {
-                _todoDate.Add(new ToDoModel() { Text = TextBox.Text, Data = CalendarAdd.SelectedDate ?? DateTime.Now });
-                TextBox.Clear();
-                Save();
-                Calc();
-                Сounter();
+                // подготовка переменной для сохранения
+                context.ToDoModels.Add(newToDoModel);
+                // сохранение в бд
+                context.SaveChanges();
             }
+
+            _todoDate.Add(newToDoModel);
+            TextBox.Clear();         
+            Calc();
+            Сounter();
+            
         }
         /// <summary>
         /// Сохраняем в Json содержимое BindingList _todoDate
         /// </summary>
-        public void Save()
+        public void Save(ToDoModel toDoModel)
         {
-            string objSave = JsonConvert.SerializeObject(_todoDate);
-            File.WriteAllText("save.txt", objSave);
+            using (var context = new MyContext())
+            {   // изменение данных в бд
+                context.ToDoModels.Update(toDoModel);
+                context.SaveChanges();
+            }           
         }
         /// <summary>
-        /// Загружаем данные из Json в BindingList _todoDate
+        /// Загружаем данные из БД в BindingList _todoDate
         /// </summary>
         public void Load()
         {
-            if (File.Exists("save.txt"))
+            using (var context = new MyContext()) 
             {
-                string text = File.ReadAllText("save.txt");
-                _todoDate = JsonConvert.DeserializeObject<BindingList<ToDoModel>>(text);
-
+                //достаем данные из базы данных
+                var toDoModelsDb = context.ToDoModels.ToList();
+                //преобразуем полученные данные в BindingList
+                _todoDate = new BindingList<ToDoModel>(toDoModelsDb);
             }
 
         }
-        /// <summary>
-        /// Метод срабатывает при закрытии программы.
-        /// </summary>
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            Save();
-        }
+       
+        
         /// <summary>
         /// Метод производит сортировку данных, по дате и галочкам в чекбоксах. 
         /// Очишает _todoDateSee
@@ -120,6 +128,8 @@ namespace WpfNewList
         /// </summary>
         private void DataGrid1_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {         
+            if(e.Row.Item is ToDoModel toDoModel)
+                Save(toDoModel);
             Calc();
             Сounter();
         }
@@ -131,8 +141,9 @@ namespace WpfNewList
             LableСounter.Content = "ОСТАЛОСЬ ЗАДАЧ - " + _todoDateSee.Where(x => !x.IsDone).Count();
             double a = _todoDateSee.Where(x => x.IsDone).Count();
             double b = _todoDateSee.Count;
-            ProgressBar.Value = b == 0 ? 0 : (int) a / b * 100;          
-            LabelProgress.Content = "прогресс выполнения " +(int)(a/b*100) + "%";
+            var c = b == 0 ? 0 : a / b * 100;
+            ProgressBar.Value = c;         
+            LabelProgress.Content = $"прогресс выполнения {(int)c}%";
            
         }
         /// <summary>
@@ -142,20 +153,15 @@ namespace WpfNewList
         {
             if (DataGrid1.SelectedItem!=null)
             {
-                Window1 Window1 = new Window1((ToDoModel)DataGrid1.SelectedItem);
-                Window1.Closed += Window1_Closed; // подписка на событие при закрытии Window1
-                Window1.Show();
+                var toDoModel = (ToDoModel)DataGrid1.SelectedItem;
+                Window1 Window1 = new Window1(toDoModel);
+                // подписка на событие при закрытии Window1
+                
+                Window1.Closed += (s,e) => { Calc(); Save(toDoModel); }; 
+                Window1.ShowDialog();
             }
 
         }
-        /// <summary>
-        ///событие при закрытии Window1
-        /// </summary>
-        private void Window1_Closed(object? sender, EventArgs e)
-        {
-            Calc();
-            Save();
-
-        }       
+        
     }
 }

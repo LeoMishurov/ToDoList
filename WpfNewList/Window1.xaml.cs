@@ -32,9 +32,7 @@ namespace WpfNewList
         private void Button_Redakt(object sender, RoutedEventArgs e)
         {
             toDoModels.Text = TextRed.Text;
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Calc();
-            mainWindow.Save();
+          
             Close();
             
         }
