@@ -53,12 +53,14 @@
         </DataGrid>
         <Button x:Name="Del" FontWeight="Bold" Content="удалить" HorizontalAlignment="Left" Margin="500,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.511" Width="95" Click="Del_Click" Height="21"/>
 
-        <Calendar x:Name="CalendarAdd" SelectedDatesChanged="Calendar_SelectedDatesChanged" Margin="625,104,0,133" FontWeight="Bold" HorizontalAlignment="Left" Width="192"/>
-        <Label Content="{Binding SelectedDate, ElementName=CalendarAdd, Mode=OneWay, StringFormat='dd.MM.yyyy', ConverterCulture= ru-RU}" FontWeight="Bold"  HorizontalAlignment="Left" Margin="679,71,0,0" VerticalAlignment="Top" Width="104" Height="36" FontSize="16"/>
+        <Calendar x:Name="CalendarAdd" SelectedDatesChanged="Calendar_SelectedDatesChanged" Margin="625,230,0,7" FontWeight="Bold" HorizontalAlignment="Left" Width="192"/>
+        <Label Content="{Binding SelectedDate, ElementName=CalendarAdd, Mode=OneWay, StringFormat='dd.MM.yyyy', ConverterCulture= ru-RU}" FontWeight="Bold"  HorizontalAlignment="Left" Margin="679,197,0,0" VerticalAlignment="Top" Width="104" Height="36" FontSize="16"/>
         <ProgressBar x:Name="ProgressBar" Value="0" HorizontalAlignment="Left" Height="17" Margin="82,81,0,0" VerticalAlignment="Top" Width="485"/>
         <Label x:Name="LabelProgress" FontWeight="Bold" Content="Label" HorizontalAlignment="Left" Margin="82,78,0,0" VerticalAlignment="Top" Width="432" Height="26"/>
         <Label x:Name="LableСounter" Content="Label" HorizontalAlignment="Left" Margin="82,55,0,0" VerticalAlignment="Top" Width="200" FontWeight="Bold" Height="26"/>
         <Button Content="редактировать" HorizontalAlignment="Left" Height="21" Margin="616,28,0,0" VerticalAlignment="Top" Width="95" FontWeight="Bold" Click="Button_Redakt"/>
+        <ComboBox x:Name="categories" HorizontalAlignment="Left" Margin="631,99,0,0" VerticalAlignment="Top" Width="179" FontWeight="Thin"/>
+        <Label Content="категории задач" HorizontalAlignment="Left" Margin="671,65,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.525,0.478" Width="106" FontWeight="Bold"/>
 
 
 
