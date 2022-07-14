@@ -5,12 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfNewList"
         mc:Ignorable="d"
-        Title="MainWindow" Height="466" Width="782"  WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="466" Width="782"  WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance local:MainWindow}" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Color x:Key="зел">#FF3AE012</Color>
+    </Window.Resources>
+
     <Grid Margin="0,0,0,-6" HorizontalAlignment="Right" Width="831" Height="456" VerticalAlignment="Bottom">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="DataGrid1" Margin="82,109,0,0" CellEditEnding="DataGrid1_CellEditEnding"  FontWeight="Bold" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Width="485" Height="168" VerticalAlignment="Top">
+        <DataGrid x:Name="DataGrid1" Margin="82,109,264,0" CellEditEnding="DataGrid1_CellEditEnding"  FontWeight="Bold" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False" Height="168" VerticalAlignment="Top">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding IsDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn x:Name="TextColumn"   Binding="{Binding Text}" Width="*" FontWeight="Bold" FontSize="12"/>
@@ -29,9 +34,8 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <TextBox x:Name="TextBox" HorizontalAlignment="Left" Margin="80,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Height="20" FontWeight="Bold"/>
-        <Button Content="добавить" FontWeight="Bold" HorizontalAlignment="Left" Margin="378,28,0,0" VerticalAlignment="Top" Width="96" Click="Add_Click" Height="21"/>
-        <DataGrid x:Name="DataGrid2"  Margin="82,272,0,35" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Left" Width="485">
+        <Button Content="добавить" FontWeight="Bold" HorizontalAlignment="Left" Margin="267,28,0,0" VerticalAlignment="Top" Width="96" Click="Add_Click" Height="21"/>
+        <DataGrid x:Name="DataGrid2"  Margin="82,272,264,35" AutoGenerateColumns="False" CanUserAddRows="False">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding IsDone}"/>
@@ -51,14 +55,27 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <Button x:Name="Del" FontWeight="Bold" Content="удалить" HorizontalAlignment="Left" Margin="500,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.511" Width="95" Click="Del_Click" Height="21"/>
+        <Button x:Name="Del" FontWeight="Bold" Content="удалить" HorizontalAlignment="Center" Margin="0,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.503,0.438" Width="95" Click="Del_Click" Height="21"/>
 
-        <Calendar x:Name="CalendarAdd" SelectedDatesChanged="Calendar_SelectedDatesChanged" Margin="625,104,0,133" FontWeight="Bold" HorizontalAlignment="Left" Width="192"/>
-        <Label Content="{Binding SelectedDate, ElementName=CalendarAdd, Mode=OneWay, StringFormat='dd.MM.yyyy', ConverterCulture= ru-RU}" FontWeight="Bold"  HorizontalAlignment="Left" Margin="679,71,0,0" VerticalAlignment="Top" Width="104" Height="36" FontSize="16"/>
+        <Calendar x:Name="CalendarAdd" SelectedDatesChanged="Calendar_SelectedDatesChanged" Margin="625,194,0,83" FontWeight="Bold" HorizontalAlignment="Left" Width="192"/>
+        <Label Content="{Binding SelectedDate, ElementName=CalendarAdd, Mode=OneWay, StringFormat='dd.MM.yyyy', ConverterCulture= ru-RU}" FontWeight="Bold"  HorizontalAlignment="Left" Margin="679,162,0,0" VerticalAlignment="Top" Width="104" Height="36" FontSize="16"/>
         <ProgressBar x:Name="ProgressBar" Value="0" HorizontalAlignment="Left" Height="17" Margin="82,81,0,0" VerticalAlignment="Top" Width="485"/>
-        <Label x:Name="LabelProgress" FontWeight="Bold" Content="Label" HorizontalAlignment="Left" Margin="82,78,0,0" VerticalAlignment="Top" Width="432" Height="26"/>
-        <Label x:Name="LableСounter" Content="Label" HorizontalAlignment="Left" Margin="82,55,0,0" VerticalAlignment="Top" Width="200" FontWeight="Bold" Height="26"/>
-        <Button Content="редактировать" HorizontalAlignment="Left" Height="21" Margin="616,28,0,0" VerticalAlignment="Top" Width="95" FontWeight="Bold" Click="Button_Redakt"/>
+        <Label x:Name="LabelProgress" FontWeight="Bold" Content="Label" Margin="82,78,317,0" VerticalAlignment="Top" Height="26"/>
+        <Label x:Name="LableСounter" Content="Label" HorizontalAlignment="Left" Margin="82,28,0,0" VerticalAlignment="Top" Width="200" FontWeight="Bold" Height="26" Foreground="#FF3AE012"/>
+        <Button Content="редактировать" HorizontalAlignment="Left" Height="21" Margin="469,28,0,0" VerticalAlignment="Top" Width="95" FontWeight="Bold" Click="Button_Redakt"/>
+        <ComboBox x:Name="cat"  ItemsSource="{Binding GroupModels}" SelectedItem="{Binding CurrentGroup}"
+                  HorizontalAlignment="Left" Margin="631,79,0,0" VerticalAlignment="Top" Width="179" FontWeight="Bold"
+                  DisplayMemberPath="Name"              
+                  
+                  SelectionChanged="cat_SelectionChanged"/>
+        <Button x:Name="AddGroup" Content="добавить/удалить группу" HorizontalAlignment="Left" Height="22" Margin="631,120,0,0" VerticalAlignment="Top" Width="179" Click="AddGroup_Click" FontWeight="Bold"/>
+        <Label Content="задачи за прошедшие  даты" HorizontalAlignment="Left" Margin="633,371,0,0" VerticalAlignment="Top" Width="177" FontWeight="Bold" Height="48" Foreground="#FF3AE012"/>
+        <Label Content="сортировка по группам" Margin="0,27,35,0" VerticalAlignment="Top" FontWeight="Bold" Height="28" HorizontalAlignment="Right" Width="149">
+            <Label.Foreground>
+                <SolidColorBrush Color="{DynamicResource зел}"/>
+            </Label.Foreground>
+        </Label>
+
 
 
 

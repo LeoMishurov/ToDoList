@@ -10,6 +10,8 @@ namespace WpfNewList
     public class MyContext : DbContext
     {
         public DbSet<ToDoModel> ToDoModels { get; set; }
+        public DbSet<GroupModel> GroupModel { get; set; }
+
         /// <summary>
         /// настройки подключения к базе данных
         /// </summary>
