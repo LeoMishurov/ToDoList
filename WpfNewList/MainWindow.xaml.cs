@@ -30,21 +30,21 @@ namespace WpfNewList
             DataContext = this;
             Load();
             Calc();
-            DataGrid1.ItemsSource = _todoDateSee;       
+            DataGrid1.ItemsSource = _todoDateSee;
             DataGrid2.ItemsSource = _todoDateLoad;
             CalendarAdd.SelectedDate = DateTime.Now.Date;
             Сounter();
-            
+
             //запись данных в List GroupModels из базы данных
             AddListGroupModels();
             //cat.SelectedIndex = 0;
         }
-        
+
 
         /// <summary>
         /// запись данных в List GroupModels из базы данных
         /// </summary>
-        public void AddListGroupModels() 
+        public void AddListGroupModels()
         {
 
             var id = CurrentGroup;
@@ -57,14 +57,14 @@ namespace WpfNewList
                 cat.SelectedIndex = 0;
                 return;
             }
-           
-            
-                // FirstOrDefault() выдает обект соответствующий условию либо вернет  null
-                var ob = GroupModels.FirstOrDefault(x => x.Id == id.Id);
-                if (ob != null)
-                    cat.SelectedIndex = GroupModels.IndexOf(ob);
-                else cat.SelectedIndex = 0;
-            
+
+
+            // FirstOrDefault() выдает обект соответствующий условию либо вернет  null
+            var ob = GroupModels.FirstOrDefault(x => x.Id == id.Id);
+            if (ob != null)
+                cat.SelectedIndex = GroupModels.IndexOf(ob);
+            else cat.SelectedIndex = 0;
+
         }
 
         //Вызов события обновления свойства через интерфейс
@@ -83,13 +83,11 @@ namespace WpfNewList
 
         private BindingList<ToDoModel> _todoDate;
 
-        private BindingList<ToDoModel> _todoDateSee=new();
+        private BindingList<ToDoModel> _todoDateSee = new();
 
-        private BindingList<ToDoModel> _todoDateLoad=new();
+        private BindingList<ToDoModel> _todoDateLoad = new();
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
-       
 
         /// <summary>
         /// Метод добавления задачи из TextBox в BindingList _todoDate
@@ -99,9 +97,9 @@ namespace WpfNewList
             WindowAdd windowAdd = new();
             if (windowAdd.ShowDialog() != true)
                 return;
-           
-            
-            using (var context = new MyContext()) 
+
+
+            using (var context = new MyContext())
             {
                 // подготовка переменной для сохранения
                 context.ToDoModels.Add(windowAdd.ToDoModel);
@@ -110,11 +108,12 @@ namespace WpfNewList
             }
 
             _todoDate.Add(windowAdd.ToDoModel);
-                    
+
             Calc();
             Сounter();
-           
+
         }
+
         /// <summary>
         /// Сохраняем в бд содержимое BindingList _todoDate
         /// </summary>
@@ -124,25 +123,23 @@ namespace WpfNewList
             {   // изменение данных в бд
                 context.ToDoModels.Update(toDoModel);
                 context.SaveChanges();
-            }           
+            }
         }
+
         /// <summary>
         /// Загружаем данные из БД в BindingList _todoDate
         /// </summary>
         public void Load()
         {
-            using (var context = new MyContext()) 
+            using (var context = new MyContext())
             {
                 //достаем данные из базы данных
                 var toDoModelsDb = context.ToDoModels.ToList();
                 //преобразуем полученные данные в BindingList
                 _todoDate = new BindingList<ToDoModel>(toDoModelsDb);
-
             }
-
         }
-       
-        
+
         /// <summary>
         /// Метод производит сортировку данных, по дате и галочкам в чекбоксах. 
         /// Очишает _todoDateSee
@@ -155,6 +152,7 @@ namespace WpfNewList
                 .OrderBy(x => x.IsDone).ThenBy(x => x.Data)
                 .ToList().ForEach(x => _todoDateSee.Add(x));
         }
+
         /// <summary>
         /// Метод удаляет выделенный элимент DataGrid1 из _todoDate.
         /// И перезаписывает _todoDateSee
@@ -171,6 +169,7 @@ namespace WpfNewList
                 Сounter();
             }
         }
+
         /// <summary>
         /// Метод переносит задачи с выборкой по дате из _todoDate в _todoDateLoad.
         /// В зависимости от даты выбранной в календаре.
@@ -181,30 +180,33 @@ namespace WpfNewList
             _todoDateLoad?.Clear();
             _todoDate.Where(x => x.Data == CalendarAdd.SelectedDate && x.Data != DateTime.Now.Date).ToList().ForEach(x => _todoDateLoad.Add(x));
         }
+
         /// <summary>
         /// Метод вызывается при завершении редактирования поля в _todoDateSee "при установке галочки в чекбокс".
         /// И перезаписывает _todoDateSee
         /// </summary>
         private void DataGrid1_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {         
-            if(e.Row.Item is ToDoModel toDoModel)
+        {
+            if (e.Row.Item is ToDoModel toDoModel)
                 Save(toDoModel);
             Calc();
             Сounter();
         }
+
         /// <summary>
         /// Счетчик задач ипрогресс бара
         /// </summary>
         private void Сounter()
-        {             
+        {
             LableСounter.Content = "осталось задач - " + _todoDateSee.Where(x => !x.IsDone).Count();
             double a = _todoDateSee.Where(x => x.IsDone).Count();
             double b = _todoDateSee.Count;
             var c = b == 0 ? 0 : a / b * 100;
-            ProgressBar.Value = c;         
+            ProgressBar.Value = c;
             LabelProgress.Content = $"прогресс выполнения {(int)c}%";
-           
+
         }
+
         /// <summary>
         /// Метод открывающий окно редактирования задач
         /// </summary>
@@ -219,7 +221,6 @@ namespace WpfNewList
                 Window1.Closed += (s, e) => { Calc(); Save(toDoModel); };
                 Window1.ShowDialog();
             }
-
         }
 
         /// <summary>
@@ -234,8 +235,9 @@ namespace WpfNewList
                 _todoDate = new BindingList<ToDoModel>(repository.GetToDosByGroupId(CurrentGroup.Id));
                 Calc();
             }
-            
+
         }
+
         /// <summary>
         /// открытие окна добавления группы
         /// </summary>
@@ -245,9 +247,8 @@ namespace WpfNewList
         {
             WindowAddGroup windowAddGroup = new();
             windowAddGroup.ShowDialog();
-            
-                AddListGroupModels();
-            
+
+            AddListGroupModels();
         }
 
         /// <summary>
