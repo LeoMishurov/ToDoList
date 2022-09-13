@@ -26,17 +26,14 @@ namespace WpfNewList
             this.toDoModels = toDoModels;
             TextRed.Text = toDoModels.Text;
         }
+
         /// <summary>
         /// Метод редактирует задачу и закрывает окно
         /// </summary>
         private void Button_Redakt(object sender, RoutedEventArgs e)
         {
-            toDoModels.Text = TextRed.Text;
-          
-            Close();
-            
-        }
-
-        
+            toDoModels.Text = TextRed.Text;        
+            Close();           
+        }      
     }
 }

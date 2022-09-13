@@ -15,7 +15,7 @@ namespace WpfNewList
         /// <returns></returns>
         public List<GroupModel> GetGroups ()
         {
-            // using отвечает за закрытие после использования обьекта класса MyContext
+            // Using отвечает за закрытие после использования обьекта класса MyContext
             using (var context = new MyContext())
             {
                 return context.GroupModel.ToList();
@@ -28,13 +28,13 @@ namespace WpfNewList
         /// <param name="groupId"></param>
         /// <returns></returns>
         public List<ToDoModel> GetToDosByGroupId(int groupId)
-        {
-            // using отвечает за закрытие после использования обьекта класса MyContext
+        {           
             using (var context = new MyContext())
             {
                 return context.ToDoModels.Where(x => groupId == 0 || x.GroupModelId==groupId).ToList();
             }
         }
+
         /// <summary>
         /// Сохранение группы в бд
         /// </summary>
@@ -44,14 +44,15 @@ namespace WpfNewList
             using (var context = new MyContext())
             {
                 if(groupModel.Id == 0)
-                    // подготовка переменной для сохранения
+                    // Подготовка переменной для сохранения
                     context.GroupModel.Add(groupModel);
                 else
                     context.GroupModel.Update(groupModel);
-                // сохранение в бд
+                // Сохранение в бд
                 context.SaveChanges();
             }
         }
+
         /// <summary>
         /// Удаление обьекта GroupModel из бд
         /// </summary>
@@ -60,13 +61,14 @@ namespace WpfNewList
         {
             using (var context = new MyContext())
             {              
-               // подготовка переменной для удаления
+               // Подготовка переменной для удаления
                 context.GroupModel.Remove(groupModel);
                 
-                // сохранение в бд
+                // Сохранение в бд
                 context.SaveChanges();
             }
         }
+
         /// <summary>
         /// Удаление обьекта ToDoModel из бд
         /// </summary>
@@ -75,10 +77,10 @@ namespace WpfNewList
         {
             using (var context = new MyContext())
             {
-                // подготовка переменной для удаления
+                // Подготовка переменной для удаления
                 context.ToDoModels.Remove(toDoModel);
 
-                // сохранение в бд
+                // Сохранение в бд
                 context.SaveChanges();
             }
         }

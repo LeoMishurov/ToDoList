@@ -20,6 +20,5 @@ namespace WpfNewList
         {
             optionsBuilder.UseSqlite("Data Source = ToDoDb.db;");
         }
-
     }
 }

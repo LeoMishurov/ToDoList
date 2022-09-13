@@ -26,13 +26,12 @@ namespace WpfNewList
 
             _groupModels = new BindingList<GroupModel>( repository.GetGroups());
 
-            ListVievGroup.ItemsSource = _groupModels;
-            
+            ListVievGroup.ItemsSource = _groupModels;           
         }
+
         Repository repository = new();
 
         private BindingList<GroupModel> _groupModels;
-
 
         /// <summary>
         /// добавление группы из TextBox
@@ -46,9 +45,9 @@ namespace WpfNewList
             Repository repository = new();
             repository.SaveGroup(groupModel);
             _groupModels.Add(groupModel);
-            TextBoxGroup.Clear();
-           
+            TextBoxGroup.Clear();          
         }
+
         /// <summary>
         /// удаление выббранной группы
         /// </summary>
@@ -58,12 +57,7 @@ namespace WpfNewList
         {
             repository.DeleteGroup((GroupModel)ListVievGroup.SelectedItem);
             
-            _groupModels.Remove((GroupModel)ListVievGroup.SelectedItem);
-
-            
-
-        }
-
-        
+            _groupModels.Remove((GroupModel)ListVievGroup.SelectedItem);      
+        }       
     }
 }

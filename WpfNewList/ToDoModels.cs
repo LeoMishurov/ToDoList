@@ -18,7 +18,7 @@ namespace WpfNewList
         public int Id { get; set; }
         public int GroupModelId { get; set; }
 
-        //Сылка на GroupModel для enti framevork
+        // Сылка на GroupModel для enti framevork
         public GroupModel GroupModel { get; set; }
 
     }
@@ -29,8 +29,7 @@ namespace WpfNewList
 
         public int Id { get; set; }
 
-        //Сылка на ToDoModel для enti framevork
+        // Сылка на ToDoModel для enti framevork
         public List<ToDoModel> ToDoModels { get; set; }
-
     }
 }

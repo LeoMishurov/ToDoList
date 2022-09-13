@@ -35,18 +35,15 @@ namespace WpfNewList
             CalendarAdd.SelectedDate = DateTime.Now.Date;
             Сounter();
 
-            //запись данных в List GroupModels из базы данных
-            AddListGroupModels();
-            //cat.SelectedIndex = 0;
+            // Запись данных в List GroupModels из базы данных
+            AddListGroupModels();           
         }
-
 
         /// <summary>
         /// запись данных в List GroupModels из базы данных
         /// </summary>
         public void AddListGroupModels()
         {
-
             var id = CurrentGroup;
             GroupModels = repository.GetGroups();
             GroupModels.Insert(0, new GroupModel { Name = "все группы", Id = 0 });
@@ -58,21 +55,18 @@ namespace WpfNewList
                 return;
             }
 
-
             // FirstOrDefault() выдает обект соответствующий условию либо вернет  null
             var ob = GroupModels.FirstOrDefault(x => x.Id == id.Id);
             if (ob != null)
                 cat.SelectedIndex = GroupModels.IndexOf(ob);
             else cat.SelectedIndex = 0;
-
         }
 
-        //Вызов события обновления свойства через интерфейс
+        // Вызов события обновления свойства через интерфейс
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
 
         Repository repository = new Repository();
 
@@ -98,20 +92,17 @@ namespace WpfNewList
             if (windowAdd.ShowDialog() != true)
                 return;
 
-
             using (var context = new MyContext())
             {
-                // подготовка переменной для сохранения
+                // Подготовка переменной для сохранения
                 context.ToDoModels.Add(windowAdd.ToDoModel);
-                // сохранение в бд
+                // Сохранение в бд
                 context.SaveChanges();
             }
 
             _todoDate.Add(windowAdd.ToDoModel);
-
             Calc();
             Сounter();
-
         }
 
         /// <summary>
@@ -120,7 +111,8 @@ namespace WpfNewList
         public void Save(ToDoModel toDoModel)
         {
             using (var context = new MyContext())
-            {   // изменение данных в бд
+            {   
+                // Изменение данных в бд
                 context.ToDoModels.Update(toDoModel);
                 context.SaveChanges();
             }
@@ -133,9 +125,9 @@ namespace WpfNewList
         {
             using (var context = new MyContext())
             {
-                //достаем данные из базы данных
+                // Достаем данные из базы данных
                 var toDoModelsDb = context.ToDoModels.ToList();
-                //преобразуем полученные данные в BindingList
+                // Преобразуем полученные данные в BindingList
                 _todoDate = new BindingList<ToDoModel>(toDoModelsDb);
             }
         }
@@ -216,8 +208,8 @@ namespace WpfNewList
             {
                 var toDoModel = (ToDoModel)DataGrid1.SelectedItem;
                 Window1 Window1 = new Window1(toDoModel);
-                // подписка на событие при закрытии Window1
 
+                // Подписка на событие при закрытии Window1
                 Window1.Closed += (s, e) => { Calc(); Save(toDoModel); };
                 Window1.ShowDialog();
             }

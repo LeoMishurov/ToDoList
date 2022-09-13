@@ -30,10 +30,10 @@ namespace WpfNewList
             GroupModels = repository.GetGroups();
         }
 
-        //событие обновления свойств, реализацтия интерфейса
+        // Событие обновления свойств, реализацтия интерфейса
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        //Вызов события обновления свойства через интерфейс
+        // Вызов события обновления свойства через интерфейс
         public void OnPropertyChanged([CallerMemberName] string prop = "") 
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
@@ -45,15 +45,12 @@ namespace WpfNewList
 
         public List<GroupModel> GroupModels { get; set; }
 
-
-
-
         /// <summary>
         /// Метод добавления задачи из TextBox в BindingList _todoDate
         /// </summary>
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            // проверка пустоты TextBox
+            // Проверка пустоты TextBox
             if (string.IsNullOrWhiteSpace(ToDoModel.Text) || ToDoModel.GroupModel == null)
                 return;
             ToDoModel.GroupModelId = ToDoModel.GroupModel.Id;
@@ -61,11 +58,7 @@ namespace WpfNewList
             DialogResult = true;
             Close();
         }
-        public void Cancel_Button_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
+
         /// <summary>
         /// Реадизация кнопки "отмена"
         /// </summary>
